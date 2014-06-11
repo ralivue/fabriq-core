@@ -329,8 +329,8 @@ class BaseMapping {
 
 		$mapped = false;
 
-		if ($installed && FabriqModules::enabled('pathmap')) {
-			if (isset($_SESSION[Fabriq::siteTitle()]['FABMOD_USERS_forcepwdreset']) && ($_SESSION[Fabriq::siteTitle()]['FABMOD_USERS_forcepwdreset'] == 1)) {
+		if ($installed && \FabriqModules::enabled('pathmap')) {
+			if (isset($_SESSION[\Fabriq::siteTitle()]['FABMOD_USERS_forcepwdreset']) && ($_SESSION[\Fabriq::siteTitle()]['FABMOD_USERS_forcepwdreset'] == 1)) {
 				if (!in_array('users', $q) && !in_array('changePassword', $q)) {
 					header('Location:' . call_user_func_array('BaseMapping::build_path', array_merge(array('users', 'changePassword'), $q)));
 				}
@@ -338,7 +338,7 @@ class BaseMapping {
 		}
 		
 		if (count($q) > 0) {
-			if ((trim($q[0]) != '') && (file_exists("app/controllers/{$q[0]}.controller.php") || file_exists('sites/' . FabriqStack::site() . "/app/controllers/{$q[0]}.controller.php"))) {
+			if ((trim($q[0]) != '') && (file_exists("app/controllers/{$q[0]}.controller.php") || file_exists('sites/' . \FabriqStack::site() . "/app/controllers/{$q[0]}.controller.php"))) {
 				$controller = $q[0];
 				$mapped = true;
 			}
@@ -352,32 +352,32 @@ class BaseMapping {
 				$action = $_FAPP['adefault'];
 			}
 			if ($mapped) {
-				FabriqStack::enqueue($controller, $action);
+				\FabriqStack::enqueue($controller, $action);
 			}
 		}
 		
 		// try to map path with pathmap module if enabled and necessary
-		if ($installed && FabriqModules::enabled('pathmap') && !$mapped) {
-			$pathmap = &FabriqModules::module('pathmap');
+		if ($installed && \FabriqModules::enabled('pathmap') && !$mapped) {
+			$pathmap = &\FabriqModules::module('pathmap');
 			$mapped = $pathmap->redirect($_GET['q']);
 		}
 		
 		// not installed, map to the install function
 		if (!$installed) {
-			PathMap::arg(0, 'fabriqinstall');
-			PathMap::arg(1, 'install');
-			FabriqStack::enqueue('fabriqinstall', 'install', 'module');
+			\PathMap::arg(0, 'fabriqinstall');
+			\PathMap::arg(1, 'install');
+			\FabriqStack::enqueue('fabriqinstall', 'install', 'module');
 			$mapped = true;
 		}
 		
 		// resolve controller and action if not already declared
 		if (!$mapped) {
 			if (count($q) == 0) {
-				PathMap::arg(0, $_FAPP['cdefault']);
-				PathMap::arg(1, $_FAPP['adefault']);
-				FabriqStack::enqueue($_FAPP['cdefault'], $_FAPP['adefault']);
+				\PathMap::arg(0, $_FAPP['cdefault']);
+				\PathMap::arg(1, $_FAPP['adefault']);
+				\FabriqStack::enqueue($_FAPP['cdefault'], $_FAPP['adefault']);
 			} else if (($q[0] != '') && (!file_exists("app/controllers/{$q[0]}.controller.php")) && (!file_exists('sites/' . FabriqStack::site() . "/app/controllers/{$q[0]}.controller.php"))) {
-				FabriqStack::error(404);
+				\FabriqStack::error(404);
 			}
 		}
 	}

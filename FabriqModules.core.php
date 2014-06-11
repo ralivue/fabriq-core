@@ -161,9 +161,9 @@ abstract class FabriqModules {
 		}
 		// try to load the module file
 		$modfile = "modules/{$module}/{$module}.module.php";
-		if (file_exists('sites/' . FabriqStack::site() . "/{$modfile}")) {
+		/*if (file_exists('sites/' . FabriqStack::site() . "/{$modfile}")) {
 			require_once('sites/' . FabriqStack::site() . "/{$modfile}");
-		} else if (file_exists($modfile)) {
+		} else */if (file_exists($modfile)) {
 			require_once($modfile);
 		} else {
 			throw new Exception("Module {$module} could not be loaded");
@@ -365,14 +365,7 @@ abstract class FabriqModules {
 	 */
 	public static function new_model($module, $model) {
 		$class = "{$module}_{$model}";
-		if (!class_exists($class)) {
-			$model = "modules/{$module}/models/{$model}.model.php";
-			if (file_exists('sites/' . FabriqStack::site() . "/{$model}")) {
-				require_once('sites/' . FabriqStack::site() . "/{$model}");
-			} else {
-				require_once($model);
-			}
-		}
+		
 		eval("\$item = new {$class}();");
 		return $item;
 	}

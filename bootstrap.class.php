@@ -27,26 +27,24 @@ namespace Fabriq\core {
 		 * @param string $class
 		 */
 		public static function default_autoloader($class) {
+			// module installer [legacy]
 			if (strpos($class, '_install') !== FALSE) {
 				$module = str_replace('_install', '', $class);
-				// see if the site has a version of this module to use instead
-				// if (file_exists('sites/' . FabriqStack::site() . "/modules/{$module}/{$module}.install.php")) {
-					// require_once('sites/' . FabriqStack::site() . "modules/{$module}/{$module}.install.php");
-				// } else {
-					require_once("modules/{$module}/{$module}.install.php");
-				// }
+				require_once("modules/{$module}/{$module}.install.php");
 			// initialize module core
-			} else if (trim($class) == 'FabriqModules') {
-				\Fabriq::init_module_core();
-			// autoload model
+			// } else if (trim($class) == 'FabriqModules') {
+				// \Fabriq::init_module_core();
+			// module model [legacy]
+			} else if (strpos($class, '_') !== FALSE) {
+				$class = explode('_', $class);
+				$module = $class[0];
+				$model = $class[1];
+				require_once("modules/{$module}/models/{$model}.model.php");
+			// model [legacy]
 			} else {
 				// see if the site had the model
 				$model = "app/models/{$class}.model.php";
-				// if (file_exists('sites/' . FabriqStack::site() . "/{$model}")) {
-					// require_once('sites/' . FabriqStack::site() . "/{$model}");
-				// } else if (file_exists($model)) {
-					require_once($model);
-				// }
+				require_once($model);
 			}
 		}
 	}
