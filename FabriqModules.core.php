@@ -465,8 +465,9 @@ abstract class FabriqModules {
 	public static function installed($module) {
 		global $db;
 		
-		$query = "SELECT COUNT(*) AS num FROM `fabmods_modules` WHERE module =? AND installed = ?";
+		$query = "SELECT COUNT(*) AS num FROM fabmods_modules WHERE module = ? AND installed = ?;";
 		$data = $db->prepare_select($query, array('num'), array($module, 1));
+
 		return ($data[0]['num'] > 0) ? true : false;
 	}
 	
@@ -476,6 +477,7 @@ abstract class FabriqModules {
 	public static function fabriqinstallReady() {
 		// check that the fabriqinstall module is installed
 		if (!FabriqModules::installed('fabriqinstall')) {
+			print_r('fabriq not installed');die();
 			FabriqModules::register_module('fabriqinstall');
 			FabriqModules::install('fabriqinstall');
 			$module = new Modules();

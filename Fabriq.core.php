@@ -188,13 +188,14 @@ abstract class Fabriq {
 	 * created yet
 	 */
 	public static function installed() {
-		if (file_exists('sites/' . FabriqStack::site() . '/config/config.inc.php')) {
-			return true;
-		}
-		if ((file_exists('config/config.inc.php')) && (FabriqStack::site() == 'default')) {
-			return true;
-		}
-		return false;
+		// if (file_exists('sites/' . FabriqStack::site() . '/config/config.inc.php')) {
+			// return true;
+		// }
+		// if ((file_exists('config/config.inc.php')) && (FabriqStack::site() == 'default')) {
+			// return true;
+		// }
+		// return false;
+		return \Fabriq\Core\Config::installed();
 	}
 
 	/**
@@ -1188,6 +1189,7 @@ class Database {
 
 			return $results;
 		}
+
 		return FALSE;
 	}
 
