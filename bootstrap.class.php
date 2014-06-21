@@ -23,6 +23,9 @@ namespace Fabriq\Core {
 			
 			// load the config file if the system has been installed
 			Config::load_config();
+			
+			// intitialize the variable path
+			Routing::init_path();
 		}
 		
 		/**
