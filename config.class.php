@@ -7,6 +7,8 @@
 
 namespace Fabriq\Core {
 	class Config {
+		private static $config;
+		
 		/**
 		 * Is the system installed?
 		 * @return bool
@@ -24,8 +26,10 @@ namespace Fabriq\Core {
 		public static function load_config() {
 			if (Config::installed()) {
 				require_once('config/config.inc.php');
-				$GLOBALS['_FDB'] = $_FDB;
-				$GLOBALS['_FAPP'] = $_FAPP;
+				self::$config = $_FAPP;
+				Database::init_config($_FDB);
+				// @TODO remove after code is fully refactored for new APIs
+				$GLOBALS['_FAPP'] = self::$config;
 			}
 		}
 	}
