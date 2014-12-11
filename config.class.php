@@ -14,11 +14,7 @@ namespace Fabriq\Core {
      * @return bool
      */
     public static function installed() {
-//      if (file_exists('config/config.inc.php')) {
-//        return true;
-//      }
-//      return false;
-      file_exists('config/config.inc.php');
+      return file_exists('config/config.inc.php');
     }
 
     /**
@@ -30,7 +26,7 @@ namespace Fabriq\Core {
         self::$config = $_FAPP;
         Databases::init_config($_FDB);
         // @TODO remove after code is fully refactored for new APIs
-        $GLOBALS['_FAPP'] = self::$config;
+//        $GLOBALS['_FAPP'] = self::$config;
       } else {
         self::initialize_install();
       }
@@ -53,6 +49,27 @@ namespace Fabriq\Core {
       }
       self::$config['url'] = "http://{$_SERVER['HTTP_HOST']}";
       self::$config['apppath'] = str_replace('//', '/', $appPath);
+    }
+
+    /**
+     * Set a config variable
+     * @param string $key
+     * @param mixed $val
+     */
+    public static function set($key, $val) {
+      self::$config[$key] = $val;
+    }
+
+    /**
+     * Get a config variable
+     * @param string $key
+     * @return mixed
+     */
+    public static function get($key) {
+      if (array_key_exists($key, self::$config)) {
+        return self::$config[$key];
+      }
+      return null;
     }
   }
 }

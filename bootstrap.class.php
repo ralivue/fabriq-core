@@ -21,6 +21,9 @@ namespace Fabriq\Core {
       // register default __autoload function
       spl_autoload_register('\Fabriq\Core\Bootstrap::default_autoloader');
 
+      // include composer autoloader
+      require('vendor/autoload.php');
+
       // load the config file if the system has been installed
       Config::load_config();
 
@@ -33,6 +36,9 @@ namespace Fabriq\Core {
      * @param string $class
      */
     public static function default_autoloader($class) {
+      // composer
+      require("vendor/autoload.php");
+
       // is this a core class?
       if (strpos($class, 'Fabriq\Core') !== FALSE) {
         $class = strtolower($class);
