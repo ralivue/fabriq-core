@@ -20,5 +20,28 @@ namespace Fabriq\Core {
       // @TODO remove after code is fully refactored for new APIs
       $GLOBALS['q'] = self::$path;
     }
+
+    /**
+     * Argument getter/setter
+     * @param integer $index
+     * @param mixed $val
+     * @return mixed
+     */
+    public static function arg($index, $val = NULL) {
+//      global $q;
+
+      if (is_null($val)) {
+//        if (count($q) > $index) {
+        if (count(self::$path) > $index) {
+//          return $q[$index];
+          return self::$path[$index];
+        } else {
+          return FALSE;
+        }
+      } else {
+//        $q[$index] = $val;
+        self::$path[$index] = $val;
+      }
+    }
   }
 }

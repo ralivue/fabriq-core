@@ -269,26 +269,6 @@ class BaseMapping {
   }
 
   /**
-   * Argument getter/setter
-   * @param integer $index
-   * @param object $val
-   * @return object
-   */
-  public static function arg($index, $val = NULL) {
-    global $q;
-
-    if (is_null($val)) {
-      if (count($q) > $index) {
-        return $q[$index];
-      } else {
-        return FALSE;
-      }
-    } else {
-      $q[$index] = $val;
-    }
-  }
-
-  /**
    * Determines the path and enques what to render. This function
    * can be extended in the /app/PathMap.class.php file to add custom
    * functionality.
@@ -334,8 +314,8 @@ class BaseMapping {
 
     // not installed, map to the install function
     if (!$installed) {
-      \PathMap::arg(0, 'fabriqinstall');
-      \PathMap::arg(1, 'install');
+      \Fabriq\Core\Routing::arg(0, 'fabriqinstall');
+      \Fabriq\Core\Routing::arg(1, 'install');
       \FabriqStack::enqueue('fabriqinstall', 'install', 'module');
       $mapped = true;
     }
@@ -343,8 +323,8 @@ class BaseMapping {
     // resolve controller and action if not already declared
     if (!$mapped) {
       if (count($q) == 0) {
-        \PathMap::arg(0, Fabriq\Core\Config::get('cdefault'));
-        \PathMap::arg(1, Fabriq\Core\Config::get('adefault'));
+        \Fabriq\Core\Routing::arg(0, Fabriq\Core\Config::get('cdefault'));
+        \Fabriq\Core\Routing::arg(1, Fabriq\Core\Config::get('adefault'));
         \FabriqStack::enqueue(Fabriq\Core\Config::get('cdefault'), Fabriq\Core\Config::get('adefault'));
       } else if (($q[0] != '') && (!file_exists("app/controllers/{$q[0]}.controller.php")) && (!file_exists('sites/' . FabriqStack::site() . "/app/controllers/{$q[0]}.controller.php"))) {
         \FabriqStack::error(404);
