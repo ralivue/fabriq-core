@@ -842,9 +842,9 @@ abstract class FabriqStack {
    */
   public static function controllerExists($controller) {
     $file = "app/controllers/{$controller}.controller.php";
-    if (file_exists('sites/' . FabriqStack::site() . "/{$file}")) {
-      return true;
-    }
+//    if (file_exists('sites/' . FabriqStack::site() . "/{$file}")) {
+//      return true;
+//    }
     return file_exists($file);
   }
 
@@ -914,21 +914,23 @@ abstract class FabriqStack {
         PathMap::controller($next->controller);
         PathMap::action($next->action);
 
-        $file = "app/controllers/{$next->controller}.controller.php";
-        if (file_exists('sites/' . FabriqStack::site() . "/{$file}")) {
-          require_once('sites/' . FabriqStack::site() . "/{$file}");
-        } else {
-          require_once($file);
-        }
-        $c = "{$next->controller}_controller";
+//        $file = "app/controllers/{$next->controller}.controller.php";
+//        if (file_exists('sites/' . FabriqStack::site() . "/{$file}")) {
+//          require_once('sites/' . FabriqStack::site() . "/{$file}");
+//        } else {
+//          require_once($file);
+//        }
+        $c = "Fabriq\App\Controllers\\" . ucfirst($next->controller) . "Controller";
         $controller = new $c();
         $a = str_replace('.', '_', $next->action);
 
-        if (!$controller->hasMethod($a)) {
+        if (!$controller->has_method($a)) {
           FabriqStack::error(404);
         }
 
+        $controller->before();
         call_user_func(array($controller, $a));
+        $controller->after();
         FabriqTemplates::renderToBody($next);
       break;
     }
@@ -1721,30 +1723,3 @@ class Model implements ArrayAccess, Iterator, Countable {
     return '`' . implode("`, `", $this->fields()) . '`';
   }
 }
-
-/**
- * @class Controller
- * Core controller class that all controllers extend
- */
-class Controller {
-  // public variables
-  // private variables
-
-  /**
-   * Returns an array of available methods
-   * @return array
-   */
-  public function controllerMethods() {
-    return get_class_methods(get_class($this));
-  }
-
-  /**
-   * Returns boolean on whether or not method exists in controller
-   * @param string $method
-   * @return boolean
-   */
-  public function hasMethod($method) {
-    return method_exists($this, $method);
-  }
-}
-

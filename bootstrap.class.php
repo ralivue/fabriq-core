@@ -48,6 +48,18 @@ namespace Fabriq\Core {
             return;
         }
       }
+
+      // is this a class in the app directory?
+      if (strpos($class, 'Fabriq\App') !== FALSE) {
+        $class = strtolower($class);
+        if (strpos($class, 'controllers') !== FALSE) {
+          $class = substr($class, strpos($class, 'controllers') + 12, strrpos($class, 'controller') - (strpos($class, 'controllers') + 12));
+          if (file_exists("app/controllers/{$class}.controller.php")) {
+            require_once("app/controllers/{$class}.controller.php");
+            return;
+          }
+        }
+      }
       // module installer [legacy]
       if (strpos($class, '_install') !== FALSE) {
         $module = str_replace('_install', '', $class);
